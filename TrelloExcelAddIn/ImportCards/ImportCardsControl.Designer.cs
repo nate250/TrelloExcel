@@ -55,7 +55,7 @@
             this.ChooseListsGroupBox.Controls.Add(this.ListsBox);
             this.ChooseListsGroupBox.Controls.Add(this.BoardsLabel);
             this.ChooseListsGroupBox.Controls.Add(this.BoardComboBox);
-            this.ChooseListsGroupBox.Location = new System.Drawing.Point(5, 179);
+            this.ChooseListsGroupBox.Location = new System.Drawing.Point(5, 258);
             this.ChooseListsGroupBox.Name = "ChooseListsGroupBox";
             this.ChooseListsGroupBox.Size = new System.Drawing.Size(256, 220);
             this.ChooseListsGroupBox.TabIndex = 0;
@@ -156,7 +156,7 @@
             this.groupBox2.Controls.Add(this.FieldsToIncludeListBox);
             this.groupBox2.Location = new System.Drawing.Point(5, 72);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(256, 101);
+            this.groupBox2.Size = new System.Drawing.Size(256, 180);
             this.groupBox2.TabIndex = 15;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "2. Choose which fields to include";
@@ -180,11 +180,14 @@
             "Name",
             "Description",
             "Due Date",
-            "List"});
+            "List",
+            "Estimates",
+            "Time Log"});
             this.FieldsToIncludeListBox.Location = new System.Drawing.Point(44, 23);
             this.FieldsToIncludeListBox.Name = "FieldsToIncludeListBox";
-            this.FieldsToIncludeListBox.Size = new System.Drawing.Size(194, 77);
+            this.FieldsToIncludeListBox.Size = new System.Drawing.Size(194, 122);
             this.FieldsToIncludeListBox.TabIndex = 12;
+            this.FieldsToIncludeListBox.SelectedIndexChanged += new System.EventHandler(this.FieldsToIncludeListBox_SelectedIndexChanged);
             // 
             // ImportCardsControl
             // 
@@ -194,7 +197,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.ChooseListsGroupBox);
             this.Name = "ImportCardsControl";
-            this.Size = new System.Drawing.Size(273, 454);
+            this.Size = new System.Drawing.Size(273, 515);
             this.ChooseListsGroupBox.ResumeLayout(false);
             this.ChooseListsGroupBox.PerformLayout();
             this.groupBox1.ResumeLayout(false);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using Microsoft.Office.Interop.Excel;
 using TrelloNet;
 
@@ -116,15 +117,47 @@ namespace TrelloExcelAddIn
         private static string[] CreateStringArrayFromCard(Card card, IEnumerable<List> lists, IEnumerable<string> fieldsToInclude)
         {
             var list = new List<string>();
+            Match match = Regex.Match(card.Name, @"(.*)?\[(([0-9]+)/)?([0-9]+)\](.*)?");
 
-            if(fieldsToInclude.Contains("Name"))
-                list.Add(card.Name);
+            if (fieldsToInclude.Contains("Name"))
+            {
+                if (match.Success)
+                {
+                    list.Add(match.Groups[1].Value.Trim() + match.Groups[5].Value);
+                }
+                else
+                {
+                    list.Add(card.Name);
+                }
+            }
             if (fieldsToInclude.Contains("Description"))
                 list.Add(card.Desc);
             if (fieldsToInclude.Contains("Due Date"))
                 list.Add(card.Due.ToString());
             if (fieldsToInclude.Contains("List"))
                 list.Add(lists.FirstOrDefault() != null ? lists.FirstOrDefault().Name : null);
+			if (fieldsToInclude.Contains("Estimates"))
+			{
+				if (match.Success)
+				{
+					list.Add(match.Groups[4].Value);
+                }
+                else
+                {
+                    list.Add("");
+                }
+			}
+			if (fieldsToInclude.Contains("Time Log"))
+			{
+                if (match.Success)
+                {
+                    list.Add(match.Groups[3].Value);
+                }
+                else
+                {
+                    list.Add("");
+                }
+			}
 
             return list.ToArray();
         }

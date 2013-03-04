@@ -89,5 +89,10 @@ namespace TrelloExcelAddIn
             for (var i = 0; i < ListsBox.Items.Count; i++ )
                 ListsBox.SetItemChecked(i, true);
         }
+
+        private void FieldsToIncludeListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

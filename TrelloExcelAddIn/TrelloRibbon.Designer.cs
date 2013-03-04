@@ -60,7 +60,7 @@
             this.group1.Items.Add(this.LoggedInButton);
             this.group1.Items.Add(this.ExportCardsButton);
             this.group1.Items.Add(this.ImportCardsButton);
-            this.group1.Label = "Trello";
+            this.group1.Label = "Trello (Debug)";
             this.group1.Name = "group1";
             // 
             // LoginSplitButton

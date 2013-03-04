@@ -187,7 +187,7 @@
             "Tasks (All)"});
             this.FieldsToIncludeListBox.Location = new System.Drawing.Point(44, 23);
             this.FieldsToIncludeListBox.Name = "FieldsToIncludeListBox";
-            this.FieldsToIncludeListBox.Size = new System.Drawing.Size(194, 122);
+            this.FieldsToIncludeListBox.Size = new System.Drawing.Size(194, 137);
             this.FieldsToIncludeListBox.TabIndex = 12;
             this.FieldsToIncludeListBox.SelectedIndexChanged += new System.EventHandler(this.FieldsToIncludeListBox_SelectedIndexChanged);
             // 

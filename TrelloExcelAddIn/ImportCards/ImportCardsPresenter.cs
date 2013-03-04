@@ -136,59 +136,74 @@ namespace TrelloExcelAddIn
                 list.Add(card.Due.ToString());
             if (fieldsToInclude.Contains("List"))
                 list.Add(lists.FirstOrDefault() != null ? lists.FirstOrDefault().Name : null);
-			if (fieldsToInclude.Contains("Estimates"))
-			{
-				if (match.Success)
-				{
-					list.Add(match.Groups[4].Value);
+
+            int est = -1, log = -1, taskEst = -1, taskLog = -1;
+
+		    if (match.Success)
+		    {
+                est = int.Parse(match.Groups[4].Value);
+            }
+            if (match.Success)
+            {
+                log = int.Parse(match.Groups[3].Value);
+            }
+            string relTasks = "", allTasks = "";
+            int i = 0;
+
+            foreach (TrelloNet.Card.Checklist cl in card.Checklists)
+            {
+                Match clMatch = Regex.Match(cl.Name, @"\{(.*?)\}");
+                bool relevant = false;
+
+                if (!clMatch.Success || clMatch.Groups[1].Value == (lists.FirstOrDefault() != null ? lists.FirstOrDefault().Name : null))
+                    relevant = true;
+
+                foreach (TrelloNet.Card.CheckItem ci in cl.CheckItems)
+                {
+                    Match ciMatch = Regex.Match(ci.Name, @"(.*)?\[(([0-9]+)/)?([0-9]+)\](.*)?");
+
+                    if (ciMatch.Success)
+                    {
+                        if (taskEst < 0) taskEst = 0;
+                        if (taskLog < 0) taskLog = 0;
+                        taskEst += int.Parse(ciMatch.Groups[4].Value);
+                        if (ci.Checked)
+                            taskLog += int.Parse(ciMatch.Groups[4].Value);
+                        else if (ciMatch.Groups[3].Value.Trim() != "")
+                            taskLog += int.Parse(ciMatch.Groups[3].Value);
+                    }
+                    string ciName = ciMatch.Groups[1].Value.Trim() + ciMatch.Groups[5].Value;
+                    if (relevant)
+                        relTasks += (i++ > 0 ? ",\r\n" : "") + ciName;
+                    allTasks += (i++ > 0 ? ",\r\n" : "") + ciName;
                 }
+            }
+
+            if (fieldsToInclude.Contains("Estimates"))
+            {
+                if (taskEst >= 0)
+                    list.Add(taskEst.ToString());
+                else if (est >= 0)
+                    list.Add(est.ToString());
                 else
-                {
                     list.Add("");
-                }
-			}
-			if (fieldsToInclude.Contains("Time Log"))
-			{
-                if (match.Success)
-                {
-                    list.Add(match.Groups[3].Value);
-                }
+            }
+            if (fieldsToInclude.Contains("Time Log"))
+            {
+                if (taskLog >= 0)
+                    list.Add(taskLog.ToString());
+                else if (log >= 0)
+                    list.Add(log.ToString());
                 else
-                {
                     list.Add("");
-                }
-			}
+            }
             if (fieldsToInclude.Contains("Tasks (Relevant)"))
             {
-                string tasks = "";
-                int i = 0;
-
-                foreach (TrelloNet.Card.Checklist cl in card.Checklists)
-                {
-                    Match clMatch = Regex.Match(cl.Name, @"\{(.*?)\}");
-                    if (!clMatch.Success || clMatch.Groups[1].Value == (lists.FirstOrDefault() != null ? lists.FirstOrDefault().Name : null))
-                    {
-                        foreach (CheckItem ci in cl.CheckItems)
-                        {
-                            tasks += (i++ > 0 ? ", " : "") + ci.Name;
-                        }
-                    }
-                }
-                list.Add(tasks);
+                list.Add(relTasks);
             }
             if (fieldsToInclude.Contains("Tasks (All)"))
             {
-                string tasks = "";
-                int i = 0;
-
-                foreach (TrelloNet.Card.Checklist cl in card.Checklists)
-                {
-                    foreach (CheckItem ci in cl.CheckItems)
-                    {
-                        tasks += ci.Name + (i++ > 0 ? ", " : "");
-                    }
-                }
-                list.Add(tasks);
+                list.Add(allTasks);
             }
 
             return list.ToArray();

@@ -182,7 +182,9 @@
             "Due Date",
             "List",
             "Estimates",
-            "Time Log"});
+            "Time Log",
+            "Tasks (Relevant)",
+            "Tasks (All)"});
             this.FieldsToIncludeListBox.Location = new System.Drawing.Point(44, 23);
             this.FieldsToIncludeListBox.Name = "FieldsToIncludeListBox";
             this.FieldsToIncludeListBox.Size = new System.Drawing.Size(194, 122);

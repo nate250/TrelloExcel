@@ -158,6 +158,38 @@ namespace TrelloExcelAddIn
                     list.Add("");
                 }
 			}
+            if (fieldsToInclude.Contains("Tasks (Relevant)"))
+            {
+                string tasks = "";
+                int i = 0;
+
+                foreach (TrelloNet.Card.Checklist cl in card.Checklists)
+                {
+                    Match clMatch = Regex.Match(cl.Name, @"\{(.*?)\}");
+                    if (!clMatch.Success || clMatch.Groups[1].Value == (lists.FirstOrDefault() != null ? lists.FirstOrDefault().Name : null))
+                    {
+                        foreach (CheckItem ci in cl.CheckItems)
+                        {
+                            tasks += (i++ > 0 ? ", " : "") + ci.Name;
+                        }
+                    }
+                }
+                list.Add(tasks);
+            }
+            if (fieldsToInclude.Contains("Tasks (All)"))
+            {
+                string tasks = "";
+                int i = 0;
+
+                foreach (TrelloNet.Card.Checklist cl in card.Checklists)
+                {
+                    foreach (CheckItem ci in cl.CheckItems)
+                    {
+                        tasks += ci.Name + (i++ > 0 ? ", " : "");
+                    }
+                }
+                list.Add(tasks);
+            }
 
             return list.ToArray();
         }

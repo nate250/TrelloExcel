@@ -13,11 +13,13 @@ namespace TrelloExcelAddIn
         IBoardId SelectedBoard { get; }
         bool EnableSelectionOfLists { get; set; }
         bool EnableImport { get; set; }
+        bool EnableUpdate { get; set; }
         IEnumerable<List> CheckedLists { get; }
         IEnumerable<string> FieldsToInclude { get; }
         void DisplayLists(IEnumerable<List> lists);
         event EventHandler ListItemCheckedChanged;
         event EventHandler ImportCardsButtonWasClicked;
+        event EventHandler UpdateCardsButtonWasClicked;
         void ShowStatusMessage(string message);
         void ShowErrorMessage(string message);
         event EventHandler RefreshButtonWasClicked;

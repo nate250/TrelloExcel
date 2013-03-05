@@ -33,6 +33,7 @@ namespace TrelloExcelAddIn
             view.BoardWasSelected += BoardWasSelected;
             view.ListItemCheckedChanged += ListItemCheckedChanged;
             view.ImportCardsButtonWasClicked += ImportCardsButtonWasClicked;
+            view.UpdateCardsButtonWasClicked += UpdateCardsButtonWasClicked;
             view.RefreshButtonWasClicked += RefreshButtonWasClicked;
         }
 
@@ -41,22 +42,33 @@ namespace TrelloExcelAddIn
             FetchAndDisplayBoards();
         }
 
+        private void UpdateCardsButtonWasClicked(object sender, EventArgs eventArgs)
+        {
+            CardImportWork(sender, eventArgs, true);
+        }
+
         private void ImportCardsButtonWasClicked(object sender, EventArgs eventArgs)
         {
-            view.ShowStatusMessage("Importing cards...");
+            CardImportWork(sender, eventArgs, false);
+        }
+
+        private void CardImportWork(object sender, EventArgs eventArgs, bool update)
+        {
+            view.ShowStatusMessage((update ? "Updating" : "Importing") + " cards...");
             view.EnableImport = false;
+            view.EnableUpdate = false;
             view.EnableSelectionOfBoards = false;
             view.EnableSelectionOfLists = false;
 
             trello.Async.Cards.ForBoard(view.SelectedBoard, BoardCardFilter.Open)
                 .ContinueWith(t =>
                 {
-                    if(t.Exception != null)
+                    if (t.Exception != null)
                     {
                         HandleException(t.Exception);
                         return;
                     }
-                    
+
                     // We should only import cards in lists the user selected
                     var cardsToImport = GetCardsForSelectedLists(t.Result, view.FieldsToInclude);
 
@@ -68,17 +80,21 @@ namespace TrelloExcelAddIn
                     // Store the address of this range for later user
                     var addressToFirstCell = rangeThatFitsAllCards.AddressLocal;
 
-                    // Kind of copy/paste this range
-                    InsertRange(rangeThatFitsAllCards);
+                    if (!update)
+                    {
+                        // Kind of copy/paste this range
+                        InsertRange(rangeThatFitsAllCards);
 
-                    // The rangeThatFitsAllCards was change after the InsertRange call, so create a new range based on addressToFirstCell
-                    rangeThatFitsAllCards = ResizeToFitAllCards(Globals.ThisAddIn.Application.ActiveSheet.Range(addressToFirstCell), numberOfRows, numberOfColumns);
+                        // The rangeThatFitsAllCards was change after the InsertRange call, so create a new range based on addressToFirstCell
+                        rangeThatFitsAllCards = ResizeToFitAllCards(Globals.ThisAddIn.Application.ActiveSheet.Range(addressToFirstCell), numberOfRows, numberOfColumns);
+                    }
 
                     // Set the values of the cells to the cards name, desc and due date
                     UpdateRangeWithCardsToImport(rangeThatFitsAllCards, cardsToImport);
 
                     view.ShowStatusMessage(string.Format("{0} card(s) imported!", numberOfRows - 1));
                     view.EnableImport = true;
+                    view.EnableUpdate = true;
                     view.EnableSelectionOfBoards = true;
                     view.EnableSelectionOfLists = true;
                 }, taskScheduler);
@@ -145,7 +161,8 @@ namespace TrelloExcelAddIn
             }
             if (match.Success)
             {
-                log = int.Parse(match.Groups[3].Value);
+                if (match.Groups[3].Value.Trim() != "")
+                    log = int.Parse(match.Groups[3].Value);
             }
             string relTasks = "", allTasks = "";
             int i = 0;
@@ -211,7 +228,7 @@ namespace TrelloExcelAddIn
 
         private void ListItemCheckedChanged(object sender, EventArgs eventArgs)
         {
-            view.EnableImport = view.CheckedLists.Any();
+            view.EnableUpdate = view.EnableImport = view.CheckedLists.Any();
         }
 
         private void BoardWasSelected(object sender, EventArgs e)
@@ -224,6 +241,7 @@ namespace TrelloExcelAddIn
                         view.DisplayLists(t.Result);
                         view.EnableSelectionOfLists = true;
                         view.EnableImport = false;
+                        view.EnableUpdate = false;
                     }
                     else
                     {
@@ -251,6 +269,7 @@ namespace TrelloExcelAddIn
             view.EnableSelectionOfLists = false;
             view.EnableSelectionOfBoards = false;
             view.EnableImport = false;
+            view.EnableUpdate = false;
         }
 
         private void FetchAndDisplayBoards()

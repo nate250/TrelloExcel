@@ -31,6 +31,12 @@ namespace TrelloExcelAddIn
                     {
                         return null;
                     }
+                    catch (TrelloException)
+                    {
+                        //TODO: Need to figure out why this is being thrown and correct it.
+                        // Adding return null at least supresses the alert.
+                        return null;
+                    }
                 })
                 .Where(o => o != null)
                 .ToDictionary(organization => organization.Id);

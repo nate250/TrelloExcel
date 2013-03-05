@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.ChooseListsGroupBox = new System.Windows.Forms.GroupBox();
+            this.UpdateCardsButton = new System.Windows.Forms.Button();
             this.RefreshButton = new System.Windows.Forms.Button();
             this.StatusLabel = new System.Windows.Forms.Label();
             this.ImportCardsButton = new System.Windows.Forms.Button();
@@ -49,22 +50,30 @@
             // ChooseListsGroupBox
             // 
             this.ChooseListsGroupBox.Controls.Add(this.RefreshButton);
-            this.ChooseListsGroupBox.Controls.Add(this.StatusLabel);
-            this.ChooseListsGroupBox.Controls.Add(this.ImportCardsButton);
             this.ChooseListsGroupBox.Controls.Add(this.ListsLabel);
             this.ChooseListsGroupBox.Controls.Add(this.ListsBox);
             this.ChooseListsGroupBox.Controls.Add(this.BoardsLabel);
             this.ChooseListsGroupBox.Controls.Add(this.BoardComboBox);
             this.ChooseListsGroupBox.Location = new System.Drawing.Point(5, 258);
             this.ChooseListsGroupBox.Name = "ChooseListsGroupBox";
-            this.ChooseListsGroupBox.Size = new System.Drawing.Size(256, 220);
+            this.ChooseListsGroupBox.Size = new System.Drawing.Size(256, 204);
             this.ChooseListsGroupBox.TabIndex = 0;
             this.ChooseListsGroupBox.TabStop = false;
             this.ChooseListsGroupBox.Text = "3. Choose from which board and lists to import";
             // 
+            // UpdateCardsButton
+            // 
+            this.UpdateCardsButton.Enabled = false;
+            this.UpdateCardsButton.Location = new System.Drawing.Point(111, 490);
+            this.UpdateCardsButton.Name = "UpdateCardsButton";
+            this.UpdateCardsButton.Size = new System.Drawing.Size(94, 22);
+            this.UpdateCardsButton.TabIndex = 17;
+            this.UpdateCardsButton.Text = "4. Update cards";
+            this.UpdateCardsButton.UseVisualStyleBackColor = true;
+            // 
             // RefreshButton
             // 
-            this.RefreshButton.Location = new System.Drawing.Point(38, 170);
+            this.RefreshButton.Location = new System.Drawing.Point(138, 177);
             this.RefreshButton.Name = "RefreshButton";
             this.RefreshButton.Size = new System.Drawing.Size(100, 22);
             this.RefreshButton.TabIndex = 16;
@@ -74,7 +83,7 @@
             // StatusLabel
             // 
             this.StatusLabel.AutoSize = true;
-            this.StatusLabel.Location = new System.Drawing.Point(6, 196);
+            this.StatusLabel.Location = new System.Drawing.Point(11, 465);
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(43, 13);
             this.StatusLabel.TabIndex = 15;
@@ -83,9 +92,9 @@
             // ImportCardsButton
             // 
             this.ImportCardsButton.Enabled = false;
-            this.ImportCardsButton.Location = new System.Drawing.Point(138, 170);
+            this.ImportCardsButton.Location = new System.Drawing.Point(11, 490);
             this.ImportCardsButton.Name = "ImportCardsButton";
-            this.ImportCardsButton.Size = new System.Drawing.Size(100, 22);
+            this.ImportCardsButton.Size = new System.Drawing.Size(94, 22);
             this.ImportCardsButton.TabIndex = 14;
             this.ImportCardsButton.Text = "4. Import cards";
             this.ImportCardsButton.UseVisualStyleBackColor = true;
@@ -195,8 +204,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.UpdateCardsButton);
             this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.StatusLabel);
             this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.ImportCardsButton);
             this.Controls.Add(this.ChooseListsGroupBox);
             this.Name = "ImportCardsControl";
             this.Size = new System.Drawing.Size(273, 515);
@@ -206,6 +218,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -224,5 +237,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckedListBox FieldsToIncludeListBox;
         private System.Windows.Forms.Button RefreshButton;
+        private System.Windows.Forms.Button UpdateCardsButton;
     }
 }

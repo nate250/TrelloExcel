@@ -13,19 +13,24 @@ namespace TrelloExcelAddIn
             InitializeComponent();
 
             for (var i = 0; i < FieldsToIncludeListBox.Items.Count; i++)
+            {
+                if (FieldsToIncludeListBox.Items[i].ToString().Contains("Tasks")) continue;
                 FieldsToIncludeListBox.SetItemChecked(i, true);
+            }
 
             StatusLabel.Text = "";
 
             BoardComboBox.SelectedIndexChanged += (sender, args) => BoardWasSelected(this, null);
             ListsBox.ItemCheck += (sender, args) => BeginInvoke((MethodInvoker)(() => ListItemCheckedChanged(this, null)));
             ImportCardsButton.Click += (sender, args) => ImportCardsButtonWasClicked(this, null);
+            UpdateCardsButton.Click += (sender, args) => UpdateCardsButtonWasClicked(this, null);
             RefreshButton.Click += (sender, args) => RefreshButtonWasClicked(this, null);
         }
 
         public event EventHandler BoardWasSelected;
         public event EventHandler ListItemCheckedChanged;
         public event EventHandler ImportCardsButtonWasClicked;
+        public event EventHandler UpdateCardsButtonWasClicked;
         public event EventHandler RefreshButtonWasClicked;
 
         public void ShowStatusMessage(string message)
@@ -69,6 +74,12 @@ namespace TrelloExcelAddIn
         {
             get { return ImportCardsButton.Enabled; }
             set { ImportCardsButton.Enabled = value; }
+        }
+
+        public bool EnableUpdate
+        {
+            get { return UpdateCardsButton.Enabled; }
+            set { UpdateCardsButton.Enabled = value; }
         }
 
         public IEnumerable<List> CheckedLists

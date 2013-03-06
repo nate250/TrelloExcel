@@ -29,22 +29,26 @@
         private void InitializeComponent()
         {
             this.ChooseListsGroupBox = new System.Windows.Forms.GroupBox();
-            this.UpdateCardsButton = new System.Windows.Forms.Button();
             this.RefreshButton = new System.Windows.Forms.Button();
-            this.StatusLabel = new System.Windows.Forms.Label();
-            this.ImportCardsButton = new System.Windows.Forms.Button();
             this.ListsLabel = new System.Windows.Forms.Label();
             this.ListsBox = new System.Windows.Forms.CheckedListBox();
             this.BoardsLabel = new System.Windows.Forms.Label();
             this.BoardComboBox = new System.Windows.Forms.ComboBox();
+            this.UpdateCardsButton = new System.Windows.Forms.Button();
+            this.StatusLabel = new System.Windows.Forms.Label();
+            this.ImportCardsButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.FieldsToIncludeListBox = new System.Windows.Forms.CheckedListBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.LabelsBox = new TrelloExcelAddIn.ColorCheckedListBox();
             this.ChooseListsGroupBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // ChooseListsGroupBox
@@ -54,50 +58,21 @@
             this.ChooseListsGroupBox.Controls.Add(this.ListsBox);
             this.ChooseListsGroupBox.Controls.Add(this.BoardsLabel);
             this.ChooseListsGroupBox.Controls.Add(this.BoardComboBox);
-            this.ChooseListsGroupBox.Location = new System.Drawing.Point(5, 258);
+            this.ChooseListsGroupBox.Location = new System.Drawing.Point(5, 203);
             this.ChooseListsGroupBox.Name = "ChooseListsGroupBox";
-            this.ChooseListsGroupBox.Size = new System.Drawing.Size(256, 204);
+            this.ChooseListsGroupBox.Size = new System.Drawing.Size(256, 147);
             this.ChooseListsGroupBox.TabIndex = 0;
             this.ChooseListsGroupBox.TabStop = false;
             this.ChooseListsGroupBox.Text = "3. Choose from which board and lists to import";
             // 
-            // UpdateCardsButton
-            // 
-            this.UpdateCardsButton.Enabled = false;
-            this.UpdateCardsButton.Location = new System.Drawing.Point(111, 490);
-            this.UpdateCardsButton.Name = "UpdateCardsButton";
-            this.UpdateCardsButton.Size = new System.Drawing.Size(94, 22);
-            this.UpdateCardsButton.TabIndex = 17;
-            this.UpdateCardsButton.Text = "4. Update cards";
-            this.UpdateCardsButton.UseVisualStyleBackColor = true;
-            // 
             // RefreshButton
             // 
-            this.RefreshButton.Location = new System.Drawing.Point(138, 177);
+            this.RefreshButton.Image = global::TrelloExcelAddIn.Properties.Resources.refresh_sign_24_241;
+            this.RefreshButton.Location = new System.Drawing.Point(6, 65);
             this.RefreshButton.Name = "RefreshButton";
-            this.RefreshButton.Size = new System.Drawing.Size(100, 22);
+            this.RefreshButton.Size = new System.Drawing.Size(34, 32);
             this.RefreshButton.TabIndex = 16;
-            this.RefreshButton.Text = "Refresh";
             this.RefreshButton.UseVisualStyleBackColor = true;
-            // 
-            // StatusLabel
-            // 
-            this.StatusLabel.AutoSize = true;
-            this.StatusLabel.Location = new System.Drawing.Point(11, 465);
-            this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(43, 13);
-            this.StatusLabel.TabIndex = 15;
-            this.StatusLabel.Text = "[Status]";
-            // 
-            // ImportCardsButton
-            // 
-            this.ImportCardsButton.Enabled = false;
-            this.ImportCardsButton.Location = new System.Drawing.Point(11, 490);
-            this.ImportCardsButton.Name = "ImportCardsButton";
-            this.ImportCardsButton.Size = new System.Drawing.Size(94, 22);
-            this.ImportCardsButton.TabIndex = 14;
-            this.ImportCardsButton.Text = "4. Import cards";
-            this.ImportCardsButton.UseVisualStyleBackColor = true;
             // 
             // ListsLabel
             // 
@@ -117,7 +92,7 @@
             this.ListsBox.FormattingEnabled = true;
             this.ListsBox.Location = new System.Drawing.Point(44, 49);
             this.ListsBox.Name = "ListsBox";
-            this.ListsBox.Size = new System.Drawing.Size(194, 122);
+            this.ListsBox.Size = new System.Drawing.Size(194, 92);
             this.ListsBox.TabIndex = 12;
             // 
             // BoardsLabel
@@ -138,6 +113,35 @@
             this.BoardComboBox.Name = "BoardComboBox";
             this.BoardComboBox.Size = new System.Drawing.Size(194, 21);
             this.BoardComboBox.TabIndex = 10;
+            // 
+            // UpdateCardsButton
+            // 
+            this.UpdateCardsButton.Enabled = false;
+            this.UpdateCardsButton.Location = new System.Drawing.Point(111, 490);
+            this.UpdateCardsButton.Name = "UpdateCardsButton";
+            this.UpdateCardsButton.Size = new System.Drawing.Size(94, 22);
+            this.UpdateCardsButton.TabIndex = 17;
+            this.UpdateCardsButton.Text = "5. Update cards";
+            this.UpdateCardsButton.UseVisualStyleBackColor = true;
+            // 
+            // StatusLabel
+            // 
+            this.StatusLabel.AutoSize = true;
+            this.StatusLabel.Location = new System.Drawing.Point(11, 455);
+            this.StatusLabel.Name = "StatusLabel";
+            this.StatusLabel.Size = new System.Drawing.Size(43, 13);
+            this.StatusLabel.TabIndex = 15;
+            this.StatusLabel.Text = "[Status]";
+            // 
+            // ImportCardsButton
+            // 
+            this.ImportCardsButton.Enabled = false;
+            this.ImportCardsButton.Location = new System.Drawing.Point(11, 490);
+            this.ImportCardsButton.Name = "ImportCardsButton";
+            this.ImportCardsButton.Size = new System.Drawing.Size(94, 22);
+            this.ImportCardsButton.TabIndex = 14;
+            this.ImportCardsButton.Text = "5. Import cards";
+            this.ImportCardsButton.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
@@ -165,7 +169,7 @@
             this.groupBox2.Controls.Add(this.FieldsToIncludeListBox);
             this.groupBox2.Location = new System.Drawing.Point(5, 72);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(256, 180);
+            this.groupBox2.Size = new System.Drawing.Size(256, 125);
             this.groupBox2.TabIndex = 15;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "2. Choose which fields to include";
@@ -192,18 +196,49 @@
             "List",
             "Estimates",
             "Time Log",
+            "Labels",
             "Tasks (Relevant)",
             "Tasks (All)"});
             this.FieldsToIncludeListBox.Location = new System.Drawing.Point(44, 23);
             this.FieldsToIncludeListBox.Name = "FieldsToIncludeListBox";
-            this.FieldsToIncludeListBox.Size = new System.Drawing.Size(194, 137);
+            this.FieldsToIncludeListBox.Size = new System.Drawing.Size(194, 92);
             this.FieldsToIncludeListBox.TabIndex = 12;
-            this.FieldsToIncludeListBox.SelectedIndexChanged += new System.EventHandler(this.FieldsToIncludeListBox_SelectedIndexChanged);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.LabelsBox);
+            this.groupBox3.Controls.Add(this.label1);
+            this.groupBox3.Location = new System.Drawing.Point(5, 350);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(256, 102);
+            this.groupBox3.TabIndex = 18;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "4. Choose a label filter";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 16);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(38, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Labels";
+            // 
+            // LabelsBox
+            // 
+            this.LabelsBox.CheckOnClick = true;
+            this.LabelsBox.ColorSource = "Key";
+            this.LabelsBox.FormattingEnabled = true;
+            this.LabelsBox.Location = new System.Drawing.Point(44, 16);
+            this.LabelsBox.Name = "LabelsBox";
+            this.LabelsBox.Size = new System.Drawing.Size(194, 79);
+            this.LabelsBox.TabIndex = 2;
             // 
             // ImportCardsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.UpdateCardsButton);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.StatusLabel);
@@ -217,6 +252,8 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -238,5 +275,8 @@
         private System.Windows.Forms.CheckedListBox FieldsToIncludeListBox;
         private System.Windows.Forms.Button RefreshButton;
         private System.Windows.Forms.Button UpdateCardsButton;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private TrelloExcelAddIn.ColorCheckedListBox LabelsBox;
+        private System.Windows.Forms.Label label1;
     }
 }

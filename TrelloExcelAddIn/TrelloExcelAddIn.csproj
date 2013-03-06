@@ -214,6 +214,9 @@
     <Compile Include="ExportCards\ICreateNewCards.cs" />
     <Compile Include="ExportCards\IExportCardsView.cs" />
     <Compile Include="IMessageBus.cs" />
+    <Compile Include="ImportCards\ColorCheckedListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ImportCards\IImportCardsView.cs" />
     <Compile Include="ImportCards\ImportCardsControl.cs">
       <SubType>UserControl</SubType>
@@ -285,6 +288,9 @@
     <Content Include="Content\s40.png" />
     <Content Include="Resources\112_Tick_Green_32x32_72.png" />
     <Content Include="Resources\157_GetPermission_48x48_72.png" />
+    <None Include="Resources\refresh_sign_24_241.png" />
+    <None Include="Resources\refresh_sign_24_24.png" />
+    <None Include="Resources\refresh_sign_4197.png" />
     <None Include="ExportCards\Resources\157_GetPermission_48x48_72.png" />
     <None Include="ExportCards\Resources\112_Tick_Green_32x32_72.png" />
   </ItemGroup>

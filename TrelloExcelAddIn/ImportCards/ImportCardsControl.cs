@@ -22,6 +22,7 @@ namespace TrelloExcelAddIn
 
             BoardComboBox.SelectedIndexChanged += (sender, args) => BoardWasSelected(this, null);
             ListsBox.ItemCheck += (sender, args) => BeginInvoke((MethodInvoker)(() => ListItemCheckedChanged(this, null)));
+            LabelsBox.ItemCheck += (sender, args) => BeginInvoke((MethodInvoker)(() => LabelItemCheckedChanged(this, null)));
             ImportCardsButton.Click += (sender, args) => ImportCardsButtonWasClicked(this, null);
             UpdateCardsButton.Click += (sender, args) => UpdateCardsButtonWasClicked(this, null);
             RefreshButton.Click += (sender, args) => RefreshButtonWasClicked(this, null);
@@ -29,6 +30,7 @@ namespace TrelloExcelAddIn
 
         public event EventHandler BoardWasSelected;
         public event EventHandler ListItemCheckedChanged;
+        public event EventHandler LabelItemCheckedChanged;
         public event EventHandler ImportCardsButtonWasClicked;
         public event EventHandler UpdateCardsButtonWasClicked;
         public event EventHandler RefreshButtonWasClicked;
@@ -70,6 +72,12 @@ namespace TrelloExcelAddIn
             set { ListsBox.Enabled = value; }
         }
 
+        public bool EnableSelectionOfLabels
+        {
+            get { return LabelsBox.Enabled; }
+            set { LabelsBox.Enabled = value; }
+        }
+
         public bool EnableImport
         {
             get { return ImportCardsButton.Enabled; }
@@ -86,6 +94,10 @@ namespace TrelloExcelAddIn
         {
             get { return ListsBox.CheckedItems.Cast<List>(); }
         }
+        public IEnumerable<KeyValuePair<Color,string>> CheckedLabels
+        {
+            get { return LabelsBox.CheckedItems.Cast<KeyValuePair<Color, string>>(); }
+        }
 
         public IEnumerable<string> FieldsToInclude
         {
@@ -101,9 +113,15 @@ namespace TrelloExcelAddIn
                 ListsBox.SetItemChecked(i, true);
         }
 
-        private void FieldsToIncludeListBox_SelectedIndexChanged(object sender, EventArgs e)
+        public void DisplayLabels(Dictionary<Color, string> labels)
         {
+            LabelsBox.DataSource = null;
+            LabelsBox.DataSource = new BindingSource(labels, null);
+            LabelsBox.DisplayMember = "Value";
+            LabelsBox.ValueMember = "Key";
 
+            for (var i = 0; i < LabelsBox.Items.Count; i++)
+                LabelsBox.SetItemChecked(i, true);
         }
     }
 }

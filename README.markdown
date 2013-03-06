@@ -12,6 +12,9 @@ Time Tracking and estimates are done by adding square brackets to card or checkl
 [4/16] means 4 hours have been logged against a 16 hour estimate.  
 If Checklists have a board title in curly braces in their title, they will be considered "relevant".  
 Checklist {Develop} will only be imported if the card is in the "Develop" list.  
-I also added an "Update cards" button. This copies over a spreadsheet range instead of shifting it down.
+Added an "Update cards" button. This copies over a spreadsheet range instead of shifting it down.  
+Modified the "Refresh" button to be a refresh image  
+Added the ability to import labels  
+Added the ability to filter on labels
 	
 License: [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)	

@@ -32,6 +32,7 @@ namespace TrelloExcelAddIn
         {
             view.BoardWasSelected += BoardWasSelected;
             view.ListItemCheckedChanged += ListItemCheckedChanged;
+            view.LabelItemCheckedChanged += LabelItemCheckedChanged;
             view.ImportCardsButtonWasClicked += ImportCardsButtonWasClicked;
             view.UpdateCardsButtonWasClicked += UpdateCardsButtonWasClicked;
             view.RefreshButtonWasClicked += RefreshButtonWasClicked;
@@ -59,6 +60,7 @@ namespace TrelloExcelAddIn
             view.EnableUpdate = false;
             view.EnableSelectionOfBoards = false;
             view.EnableSelectionOfLists = false;
+            view.EnableSelectionOfLabels = false;
 
             trello.Async.Cards.ForBoard(view.SelectedBoard, BoardCardFilter.Open)
                 .ContinueWith(t =>
@@ -69,8 +71,18 @@ namespace TrelloExcelAddIn
                         return;
                     }
 
+                    List<Card.Label> checkedLabels = new List<Card.Label>();
+
+                    foreach (KeyValuePair<Color, string> kvp in view.CheckedLabels)
+                    {
+                        Card.Label label = new Card.Label();
+                        label.Color = kvp.Key;
+                        label.Name = kvp.Value;
+                        checkedLabels.Add(label);
+                    }
+
                     // We should only import cards in lists the user selected
-                    var cardsToImport = GetCardsForSelectedLists(t.Result, view.FieldsToInclude);
+                    var cardsToImport = GetCardsForSelectedLists(t.Result, view.FieldsToInclude, checkedLabels);
 
                     // Create a range based on the current selection. Rows = number of cards, Columns = 4 (to fit name, desc, list and due date)
                     var numberOfRows = cardsToImport.GetUpperBound(0) + 1;
@@ -97,6 +109,7 @@ namespace TrelloExcelAddIn
                     view.EnableUpdate = true;
                     view.EnableSelectionOfBoards = true;
                     view.EnableSelectionOfLists = true;
+                    view.EnableSelectionOfLabels = true;
                 }, taskScheduler);
         }
 
@@ -119,13 +132,39 @@ namespace TrelloExcelAddIn
             return rangeSelection.Resize[numberOfRows, numberOfColumns];
         }
 
-        private string[,] GetCardsForSelectedLists(IEnumerable<Card> allCards, IEnumerable<string> fieldsToInclude)
-        {            
-            var cards = allCards.Where(c => view.CheckedLists.Select(cl => cl.Id).Contains(c.IdList)).ToList();
+        private bool IntersectLabelLists(List<Card.Label> a, List<Card.Label> b)
+        {
+            var intersection = from la in a
+                               join lb in b on la.Color equals lb.Color
+                               select true;
 
-            var cardsToImportWithListName = from c in cards
+            if (intersection.Count<bool>() == 0)
+                return false;
+
+            foreach (bool found in intersection)
+                if (!found) return false;
+
+            return true;
+        }
+
+        private string[,] GetCardsForSelectedLists(IEnumerable<Card> allCards, IEnumerable<string> fieldsToInclude, List<Card.Label> labelFilter)
+        {
+            var cards = allCards.Where(c => view.CheckedLists.Select(cl => cl.Id).Contains(c.IdList)).ToList();
+            IEnumerable<string[]> cardsToImportWithListName;
+
+            if (labelFilter.Count < Enum.GetNames(typeof(TrelloNet.Color)).Length)
+            {
+                cardsToImportWithListName = from c in cards
+                                            join l in view.CheckedLists on c.IdList equals l.Id into gj
+                                            where IntersectLabelLists(c.Labels,labelFilter)
+                                            select CreateStringArrayFromCard(c, gj, fieldsToInclude);
+            }
+            else
+            {
+                cardsToImportWithListName = from c in cards
                                             join l in view.CheckedLists on c.IdList equals l.Id into gj
                                             select CreateStringArrayFromCard(c, gj, fieldsToInclude);
+            }
 
             return new[] { fieldsToInclude.ToArray() }.Union(cardsToImportWithListName).ToArray().ToMultidimensionalArray();
         }
@@ -189,7 +228,7 @@ namespace TrelloExcelAddIn
                         else if (ciMatch.Groups[3].Value.Trim() != "")
                             taskLog += int.Parse(ciMatch.Groups[3].Value);
                     }
-                    string ciName = ciMatch.Groups[1].Value.Trim() + ciMatch.Groups[5].Value;
+                    string ciName = ciMatch.Groups[0].Value.Trim() + ciMatch.Groups[5].Value;
                     if (relevant)
                         relTasks += (i++ > 0 ? ",\r\n" : "") + ciName;
                     allTasks += (i++ > 0 ? ",\r\n" : "") + ciName;
@@ -214,6 +253,18 @@ namespace TrelloExcelAddIn
                 else
                     list.Add("");
             }
+            if (fieldsToInclude.Contains("Labels"))
+            {
+                var labelStrings = from l in card.Labels
+                                   select l.Name + "(" + l.Color.ToString() + ")";
+                string labelString = "";
+                foreach (string l in labelStrings)
+                {
+                    labelString += (labelString.Length > 0?",\r\n":"") + l;
+                }
+
+                list.Add(labelString);
+            }
             if (fieldsToInclude.Contains("Tasks (Relevant)"))
             {
                 list.Add(relTasks);
@@ -224,6 +275,11 @@ namespace TrelloExcelAddIn
             }
 
             return list.ToArray();
+        }
+
+        private void LabelItemCheckedChanged(object sender, EventArgs eventArgs)
+        {
+            view.EnableUpdate = view.EnableImport = view.CheckedLabels.Any();
         }
 
         private void ListItemCheckedChanged(object sender, EventArgs eventArgs)
@@ -248,6 +304,19 @@ namespace TrelloExcelAddIn
                         HandleException(t.Exception);
                     }
                 }, taskScheduler);
+            trello.Async.Boards.WithId(view.SelectedBoard.GetBoardId())
+                .ContinueWith(t =>
+                {
+                    if (t.Exception == null)
+                    {
+                        view.DisplayLabels(t.Result.LabelNames);
+                        view.EnableSelectionOfLabels = true;
+                    }
+                    else
+                    {
+                        HandleException(t.Exception);
+                    }
+                }, taskScheduler);
         }
 
         private void SetupMessageEventHandlers()
@@ -261,12 +330,14 @@ namespace TrelloExcelAddIn
             DisableStuff();
             view.DisplayBoards(Enumerable.Empty<BoardViewModel>());
             view.DisplayLists(Enumerable.Empty<List>());
+            view.DisplayLabels(new Dictionary<Color, string>());
             view.ShowStatusMessage("");
         }
 
         private void DisableStuff()
         {
             view.EnableSelectionOfLists = false;
+            //view.EnableSelectionOfLabels = false;
             view.EnableSelectionOfBoards = false;
             view.EnableImport = false;
             view.EnableUpdate = false;
